@@ -1,15 +1,19 @@
 ---
 title: "RDM homework - Analysis report"
+subtitle: "National Malaria Indicator Survey 2019/2020"
 author: "Helene Langet"
+date: today
 format: html
 editor: visual
 execute:
   error: true
-  echo: false
+  echo: true
   warning: false
 ---
 
 ```{r}
+#| echo: false
+
 # Load required libraries
 
 # Load the tidyverse collection of packages for data manipulation and visualization
@@ -21,18 +25,15 @@ library(haven)
 # Load the gtsummary package to create publication-ready summary tables
 # Useful for descriptive statistics and model result tables with clean formatting
 library(gtsummary)
+
+#
+library(RStata)
 ```
 
 ```{r}
+#| echo: false
+#| output: false
 source("1_cleaning_script.R")
-```
-
-```{r}
-# Load the (clean) household-level data 
-#household_df <- haven::read_dta("../data/cleanR_household_with_village.dta")
-
-# Load the (clean) household-level data 
-# ...
 ```
 
 # About the National Malaria Indicator Survey 2019/2020
@@ -72,29 +73,113 @@ How many household interviews were conducted per month?
 count_df <- household_with_village_df |>
   dplyr::group_by(month) |>
   dplyr::count()
+```
+
+```{r}
 count_df |> 
   knitr::kable()
 ```
 
-Instructions:
+## Graph instruction
 
--   Step 1: Add color to bars
--   Step 2: Add data labels to the bars
--   Step 3: Adjust the y-axis limits
--   Step 4: Improve x-axis date formatting
--   Step 5: Add labels to the axes
--   Step 6: Highlight year transitions with a vertical line
--   Step 7: Apply a minimal theme
--   Step 8: Customize theme elements for cleaner look
--   Step 9: Add a caption
--   Step 10: Adjust the dimensions of the figure so that its width is twice its height
+* [ ]	Step 1: Create a barplot that displays household interviews by month (data information)
+*	[ ] Step 2: Add color to bars
+*	[ ] Step 3: Print data labels above or next to the bars
+*	[ ] Step 4: Adjust the y-axis limits
+*	[ ] Step 5: Improve x-axis date formatting so that dates are displayed with the format “JAN 2023”
+*	[ ] Step 6: Add labels to the x and y-axes
+*	[ ] Step 7: Highlight year transitions with a vertical dashed line
+*	[ ] Step 8: Customize theme elements for cleaner look
+*	[ ] Step 9: Add a caption or a title
+*	[ ] Step 10: Adjust the dimensions of the figure so that its width is twice its height
+*	[ ] Step 11: Add a figure ID for cross-referencing (reproducible reports)
+
+## Step 1: data + geometry layers
+
+Create a bar plot showing variable `n` per `month`.
+
+```{r}
+count_df |>
+  ggplot(mapping = ggplot2::aes(x = month, y = n)) +  # Set up plot with x = month, y = n
+  ggplot2::geom_bar(                                  # Use bar geometry
+    stat = "identity"                                 # Heights of bars represent actual 'n' values
+  )
+```
+
+⚠️ Beware of variable types: here if month is stored as a categorical variable (instead of a date), it will only display months present in the data. This means missing months will not appear, which can hide important patterns.
+
+```{r}
+count_df |>
+  dplyr::mutate(month = as.factor(month)) |> 
+  ggplot(mapping = ggplot2::aes(x = month, y = n)) +
+  ggplot2::geom_bar(stat = "identity")
+```
+
+This geometry layer is critical for interpretation. You need to ensure you get the right information and representation here. If necessary, go back to your data cleaning step.
+
+## Step 2
+
+You can fill all bars with the same static color using the parameter `fill`.
+
+```{r}
+count_df |>
+  ggplot(mapping = ggplot2::aes(x = month, y = n)) +
+  ggplot2::geom_bar(
+    stat = "identity",
+    fill = "#ebd686"                                  # Set a fixed fill color for all bars
+  )
+```
+
+To apply conditional coloring, you would need to use `fill =` with your conditional variable inside `aes`.
+
+```{r}
+count_df |>
+  dplyr::mutate(color = ifelse(n>200, ">200", "<=200")) |> 
+  ggplot(mapping = ggplot2::aes(x = month, y = n, fill = color)) +
+  ggplot2::geom_bar(stat = "identity")
+```
+
+## Step 3
+
+```{r}
+count_df |>
+  ggplot(mapping = ggplot2::aes(x = month, y = n)) +
+  ggplot2::geom_bar(
+    stat = "identity",
+    fill = "#ebd686"
+  ) +
+  ggplot2::geom_text(
+    mapping = ggplot2::aes(label = n),
+    vjust = -0.5,
+    color = "black"
+    )
+```
+
+## Step 4
 
 ```{r}
 M <- plyr::round_any(max(count_df$n), 10) + 10
+```
+
+I have done all the required steps, the resulting graph is displayed in @fig-1.
+
+```{r}
+#| label: fig-1
+#| fig-cap: Number of household interviews per month from October 2019 to December 2020.
+#| fig-height: 4
+#| fig-width: 8
+
 count_df |>
   ggplot(mapping = ggplot2::aes(x = month, y = n)) +
-  ggplot2::geom_bar(stat = "identity", fill = "blue") +
-  ggplot2::geom_text(mapping = ggplot2::aes(label = n), vjust = -0.5, color = "black") +
+  ggplot2::geom_bar(
+    stat = "identity",
+    fill = "#ebd686"
+    ) +
+  ggplot2::geom_text(
+    mapping = ggplot2::aes(label = n),
+    vjust = -0.5,
+    color = "black"
+    ) +
   ggplot2::ylim(0, M) +
   ggplot2::scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") +
   ggplot2::labs(x = "Month",
