@@ -90,7 +90,8 @@ Instructions:
 ```{r}
 count_df |>
   ggplot(mapping = ggplot2::aes(x = month, y = n)) +
-    ggplot2::geom_bar(stat = "identity", fill = "blue")
+  ggplot2::geom_bar(stat = "identity", fill = "blue") +
+  ggplot2::geom_text(mapping = ggplot2::aes(label = n), vjust = -0.5, color = "black")
 ```
 
 # Question 2
