@@ -3,6 +3,9 @@ title: "RDM homework - Analysis report"
 author: "Helene Langet"
 format: html
 editor: visual
+execute:
+  echo: false
+  warning: false
 ---
 
 ```{r}
