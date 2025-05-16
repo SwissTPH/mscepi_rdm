@@ -33,14 +33,15 @@ source("1_cleaning_script.R")
 # Load the (clean) household-level data 
 # ...
 ```
+
 # About the National Malaria Indicator Survey 2019/2020
 
 Cross-sectional household survey in all 22 provinces of Papua New Guinea.
 
-* 5 randomly sampled villages/province
-* ca. 30 random households/village
-* Structured interviews
-* Finger-prick blood sample for malaria diagnosis by Rapid Diagnostic Test (RDT) and light microscopy
+-   5 randomly sampled villages/province
+-   ca. 30 random households/village
+-   Structured interviews
+-   Finger-prick blood sample for malaria diagnosis by Rapid Diagnostic Test (RDT) and light microscopy
 
 # Shell tables
 
@@ -64,7 +65,7 @@ clean_individual_df |>
 
 # Question 1
 
-How many household interviews were conducted per month? 
+How many household interviews were conducted per month?
 
 ```{r}
 count_df <- household_with_village_df |>
@@ -76,16 +77,16 @@ count_df |>
 
 Instructions:
 
-* Step 1: Add color to bars
-* Step 2: Add data labels to the bars
-* Step 3: Adjust the y-axis limits
-* Step 4: Improve x-axis date formatting
-* Step 5: Add labels to the axes
-* Step 6: Highlight year transitions with a vertical line
-* Step 7: Apply a minimal theme
-* Step 8: Customize theme elements for cleaner look
-* Step 9: Add a caption
-* Step 10: Adjust the dimensions of the figure so that its width is twice its height
+-   Step 1: Add color to bars
+-   Step 2: Add data labels to the bars
+-   Step 3: Adjust the y-axis limits
+-   Step 4: Improve x-axis date formatting
+-   Step 5: Add labels to the axes
+-   Step 6: Highlight year transitions with a vertical line
+-   Step 7: Apply a minimal theme
+-   Step 8: Customize theme elements for cleaner look
+-   Step 9: Add a caption
+-   Step 10: Adjust the dimensions of the figure so that its width is twice its height
 
 ```{r}
 count_df |>
@@ -97,6 +98,14 @@ count_df |>
 # Question 2
 
 Are members of households that own at least one long-lasting insecticidal net (LLIN) less likely to be infected with malaria parasites?
+
+```{r}
+cross_tab <- table(individual_merge_df$mosquitonet, individual_merge_df$microscopy_res)
+
+# chi-square test
+chi_sq_test <- prop.test(cross_tab, correct = FALSE)
+chi_sq_test
+```
 
 # Question 3
 
