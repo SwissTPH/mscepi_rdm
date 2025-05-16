@@ -56,6 +56,12 @@ household_with_village_df |>
 
 ## Shell 3
 
+```{r}
+clean_individual_df |>
+  dplyr::select(age) |>
+  gtsummary::tbl_summary()
+```
+
 # Question 1
 
 How many household interviews were conducted per month? 
@@ -64,7 +70,8 @@ How many household interviews were conducted per month?
 count_df <- household_with_village_df |>
   dplyr::group_by(month) |>
   dplyr::count()
-count_df
+count_df |> 
+  knitr::kable()
 ```
 
 Instructions:
@@ -83,7 +90,7 @@ Instructions:
 ```{r}
 count_df |>
   ggplot(mapping = ggplot2::aes(x = month, y = n)) +
-    ggplot2::geom_bar(stat = "identity")
+    ggplot2::geom_bar(stat = "identity", fill = "blue")
 ```
 
 # Question 2
