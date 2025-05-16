@@ -92,7 +92,21 @@ Instructions:
 count_df |>
   ggplot(mapping = ggplot2::aes(x = month, y = n)) +
   ggplot2::geom_bar(stat = "identity", fill = "blue") +
-  ggplot2::geom_text(mapping = ggplot2::aes(label = n), vjust = -0.5, color = "black")
+  ggplot2::geom_text(mapping = ggplot2::aes(label = n), vjust = -0.5, color = "black") +
+  ggplot2::ylim(0, M) +
+  ggplot2::scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") +
+  ggplot2::labs(x = "Month",
+                y = "Number of household interviews") +
+  ggplot2::geom_vline(xintercept = as.numeric(as.Date(paste0(unique(format(household_merge_df$month, "%Y")), "-01-01"))),
+                      linetype = "dashed") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
+                 panel.grid.major.x = ggplot2::element_blank(),
+                 panel.grid.minor.x = ggplot2::element_blank(),
+                 panel.grid.major.y = ggplot2::element_blank(),
+                 panel.grid.minor.y = ggplot2::element_blank(),
+                 axis.text.y = ggplot2::element_blank(),
+                 axis.ticks.y = ggplot2::element_blank())
 ```
 
 # Question 2
