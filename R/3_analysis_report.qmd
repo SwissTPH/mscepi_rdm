@@ -1,7 +1,7 @@
 ---
 title: "RDM homework - Analysis report"
 author: "Helene Langet"
-format: docx
+format: html
 editor: visual
 ---
 
@@ -20,8 +20,12 @@ library(gtsummary)
 ```
 
 ```{r}
+source("1_cleaning_script.R")
+```
+
+```{r}
 # Load the (clean) household-level data 
-household_df <- haven::read_dta("../data/cleanR_household_with_village.dta")
+#household_df <- haven::read_dta("../data/cleanR_household_with_village.dta")
 
 # Load the (clean) household-level data 
 # ...
@@ -42,7 +46,7 @@ Cross-sectional household survey in all 22 provinces of Papua New Guinea.
 ## Shell 2
 
 ```{r}
-household_df |>
+household_with_village_df |>
   dplyr::select(altitude) |>
   gtsummary::tbl_summary(label = list("altitude" ~ "Altitude (m)"))
 ```
@@ -54,7 +58,7 @@ household_df |>
 How many household interviews were conducted per month? 
 
 ```{r}
-count_df <- household_df |>
+count_df <- household_with_village_df |>
   dplyr::group_by(month) |>
   dplyr::count()
 count_df
