@@ -134,6 +134,12 @@ household_with_village_df <- household_with_village_df |>
                 selected = 1,
                 interviewed = ifelse(is.na(mosquitonet), 0,  1))
 
+values_household <- unique(clean_household_df$villagecode)
+values_village <- clean_village_df$vcode
+
+# Check if all values in column A are present in column B
+all(values_household %in% values_village)
+
 ############################################
 # Load and clean the individual-level data #
 ############################################
@@ -149,7 +155,16 @@ skimr::skim(raw_individual_df)
 # View metadata and variable labels
 labelled::generate_dictionary(raw_individual_df)
 
-clean_individual_df <- raw_individual_df
+clean_individual_df <- raw_individual_df |>
+  dplyr::mutate(age = str_replace_all(age, "O", "0"),
+                age = str_replace_all(age, "[^0-9]+", ""),
+                age = as.integer(age),
+                hb = str_replace_all(hb, "[^0-9.]+", ""),
+                hb = as.numeric(hb),
+                sex = ifelse(sex == "", NA, sex),
+                across(c(sex, result_rdt, res_pf, res_pv, result, vcode, hhid, line_no), as.factor),
+                line_no = ifelse(vcode == "IWN" & hhid == "10" & is.na(line_no), 2, line_no)) |>
+  dplyr::rename(microscopy_res = result)
 
 #######################
 # Save clean datasets #
