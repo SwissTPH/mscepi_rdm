@@ -32,6 +32,9 @@ Welcome! This GitHub repository has been created for **educational purposes** an
 
   ![image](https://github.com/user-attachments/assets/e7aa53e1-ec4e-4769-b3e8-495f6c0ffaca)
 
+4. Select **Fpr my own purposes** to avoid sending your updates directly to the main project
+  ![image](https://github.com/user-attachments/assets/992de712-123c-4272-bbbf-2d43c486cea3)
+
 > 📘 More info about [fork and clone](https://github.com/SwissTPH/mscepi_rdm/wiki/GitHub-vocabulary#fork-and-clone)
 
 ### ✍️ **Make your changes**
